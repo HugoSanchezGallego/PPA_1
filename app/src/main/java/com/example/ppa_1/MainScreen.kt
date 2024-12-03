@@ -11,31 +11,36 @@ import androidx.navigation.NavController
 @Composable
 fun MainScreen(navController: NavController) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.fillMaxSize()
     ) {
-        Button(
-            onClick = { navController.navigate("addSubject") },
-            modifier = Modifier.fillMaxWidth()
+        Header(title = "")
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Añadir asignatura")
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = { navController.navigate("viewSchedule") },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Ver horario")
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = { navController.navigate("currentClass") },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("¿Qué clases tengo?")
+            Button(
+                onClick = { navController.navigate("addSubject") },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Añadir asignatura")
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = { navController.navigate("viewSchedule") },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Ver horario")
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = { navController.navigate("currentClass") },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("¿Qué clases tengo?")
+            }
         }
     }
 }

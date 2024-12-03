@@ -30,24 +30,29 @@ fun CurrentClassScreen() {
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.fillMaxSize()
     ) {
-        Text(currentDate)
-        Spacer(modifier = Modifier.height(16.dp))
-        if (currentClass != null) {
-            Text(
-                "Estás en clase de $currentClass",
-                color = Color.Red
-            )
-        } else {
-            Text(
-                "No estás en ninguna clase",
-                color = Color.Green
-            )
+        Header(title = "¿Qué clases tengo?")
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(currentDate)
+            Spacer(modifier = Modifier.height(16.dp))
+            if (currentClass != null) {
+                Text(
+                    "Estás en clase de $currentClass",
+                    color = Color.Red
+                )
+            } else {
+                Text(
+                    "No estás en ninguna clase",
+                    color = Color.Green
+                )
+            }
         }
     }
 }

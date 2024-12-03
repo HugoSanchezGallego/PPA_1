@@ -18,43 +18,48 @@ fun ViewScheduleScreen() {
     val db = FirebaseFirestore.getInstance()
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
+        modifier = Modifier.fillMaxSize()
     ) {
-        TextField(
-            value = selectedDay,
-            onValueChange = { selectedDay = it },
-            label = { Text("Día de la semana") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = {
-                db.collection("subjects")
-                    .whereEqualTo("day", selectedDay)
-                    .get()
-                    .addOnSuccessListener { result: QuerySnapshot ->
-                        subjects = result.documents.map { it.data as Map<String, String> }
-                    }
-            },
-            modifier = Modifier.align(Alignment.End)
+        Header(title = "Ver horario")
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
         ) {
-            Text("Ver horario")
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        LazyColumn(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            items(subjects) { subject ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 4.dp),
-                    elevation = CardDefaults.cardElevation(4.dp)
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text("${subject["name"]}")
+            TextField(
+                value = selectedDay,
+                onValueChange = { selectedDay = it },
+                label = { Text("Día de la semana") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = {
+                    db.collection("subjects")
+                        .whereEqualTo("day", selectedDay)
+                        .get()
+                        .addOnSuccessListener { result: QuerySnapshot ->
+                            subjects = result.documents.map { it.data as Map<String, String> }
+                        }
+                },
+                modifier = Modifier.align(Alignment.End)
+            ) {
+                Text("Ver horario")
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            LazyColumn(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                items(subjects) { subject ->
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp),
+                        elevation = CardDefaults.cardElevation(4.dp)
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text("${subject["name"]}")
+                        }
                     }
                 }
             }

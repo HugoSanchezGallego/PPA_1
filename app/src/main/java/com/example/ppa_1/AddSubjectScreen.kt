@@ -17,73 +17,91 @@ fun AddSubjectScreen(navController: NavController) {
     var errorMessage by remember { mutableStateOf<String?>(null) }
     val db = FirebaseFirestore.getInstance()
 
+    val validWeekdays = listOf("lunes", "martes", "miércoles", "jueves", "viernes")
+    val weekends = listOf("sábado", "domingo")
+
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center
+        modifier = Modifier.fillMaxSize()
     ) {
-        TextField(
-            value = subjectName,
-            onValueChange = { subjectName = it },
-            label = { Text("Nombre de la asignatura") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        TextField(
-            value = day,
-            onValueChange = { day = it },
-            label = { Text("Día") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        TextField(
-            value = time,
-            onValueChange = { time = it },
-            label = { Text("Hora (HH:mm)") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        if (errorMessage != null) {
-            Text(
-                text = errorMessage!!,
-                color = MaterialTheme.colorScheme.error,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-        }
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
+        Header(title = "Añadir asignatura")
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center
         ) {
-            Button(
-                onClick = {
-                    subjectName = ""
-                    day = ""
-                    time = ""
-                    errorMessage = null
-                }
-            ) {
-                Text("Cancelar")
+            TextField(
+                value = subjectName,
+                onValueChange = { subjectName = it },
+                label = { Text("Nombre de la asignatura") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            TextField(
+                value = day,
+                onValueChange = { day = it },
+                label = { Text("Día") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            TextField(
+                value = time,
+                onValueChange = { time = it },
+                label = { Text("Hora (HH:mm)") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            if (errorMessage != null) {
+                Text(
+                    text = errorMessage!!,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
             }
-            Button(
-                onClick = {
-                    if (subjectName.isBlank() || day.isBlank() || time.isBlank()) {
-                        errorMessage = "Todos los campos deben estar llenos"
-                    } else if (!time.matches(Regex("^([01]?[0-9]|2[0-3]):[0-5][0-9]$"))) {
-                        errorMessage = "Formato de hora incorrecto"
-                    } else {
-                        val subject = hashMapOf(
-                            "name" to subjectName,
-                            "day" to day.lowercase(),
-                            "time" to time
-                        )
-                        db.collection("subjects")
-                            .add(subject)
-                        navController.popBackStack()
-                    }
-                }
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Añadir asignatura")
+                Button(
+                    onClick = {
+                        subjectName = ""
+                        day = ""
+                        time = ""
+                        errorMessage = null
+                    }
+                ) {
+                    Text("Cancelar")
+                }
+                Button(
+                    onClick = {
+                        when {
+                            subjectName.isBlank() || day.isBlank() || time.isBlank() -> {
+                                errorMessage = "Todos los campos deben estar llenos"
+                            }
+                            !validWeekdays.contains(day.lowercase()) && !weekends.contains(day.lowercase()) -> {
+                                errorMessage = "Día no válido"
+                            }
+                            weekends.contains(day.lowercase()) -> {
+                                errorMessage = "No puedes tener clase en fines de semana"
+                            }
+                            !time.matches(Regex("^([01]?[0-9]|2[0-3]):[0-5][0-9]$")) -> {
+                                errorMessage = "Formato de hora incorrecto"
+                            }
+                            else -> {
+                                val subject = hashMapOf(
+                                    "name" to subjectName,
+                                    "day" to day.lowercase(),
+                                    "time" to time
+                                )
+                                db.collection("subjects")
+                                    .add(subject)
+                                navController.popBackStack()
+                            }
+                        }
+                    }
+                ) {
+                    Text("Añadir asignatura")
+                }
             }
         }
     }

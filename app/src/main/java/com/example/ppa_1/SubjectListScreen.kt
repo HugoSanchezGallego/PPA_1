@@ -30,17 +30,17 @@ fun SubjectListScreen() {
     ) {
         items(subjects) { subject ->
             Card(
-    modifier = Modifier
-        .fillMaxWidth()
-        .padding(vertical = 4.dp),
-    elevation = CardDefaults.cardElevation(4.dp)
-) {
-    Column(modifier = Modifier.padding(16.dp)) {
-        Text("Name: ${subject["name"]}")
-        Text("Day: ${subject["day"]}")
-        Text("Time: ${subject["time"]}")
-    }
-}
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+                elevation = CardDefaults.cardElevation(4.dp)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("Name: ${subject["name"]}")
+                    Text("Day: ${subject["day"]}")
+                    Text("Time: ${subject["time"]}")
+                }
+            }
         }
     }
 }
